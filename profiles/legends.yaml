@@ -1,0 +1,129 @@
+# SomaSetup profile: legends
+# The Legends of Basketball membership site + embedded SOMA guide (Bill) + the
+# change-management queue. Consumed by SOMASETUP.md. Contains NO secret values —
+# only the names of secrets to prompt for, and where they go.
+
+profile: legends
+description: >
+  Legends of Basketball membership platform. Includes soma-agent (the SOMA-Guide /
+  "Bill" voice+text engine) and soma-auth (Supabase magic-link).
+  KEY OWNERSHIP (per Mike): model/LLM keys are GREG'S OWN from day one (his Claude
+  account for the CLI; his own OpenAI key if needed; Ollama is local/free). All
+  INFRA keys (Supabase, ElevenLabs, Netlify, Gmail) are MIKE'S, pasted in-session for
+  first launch. Migrating infra to Greg's own accounts is skills/provision-accounts.md
+  (skill #2), not part of first launch.
+
+# --- Key ownership split (revision) ---
+key_ownership:
+  model_keys:                 # GREG'S OWN — set up in Phase 0
+    owner: greg
+    items:
+      - claude_cli: sign the standalone `claude` CLI into Greg's Claude account
+      - openai_api_key: only if a profile/tool needs OpenAI; Greg creates his own
+                        (note: a ChatGPT subscription is NOT an API key)
+      - ollama: local qwen2.5:7b, free, no key
+  infra_keys:                 # MIKE'S — pasted in-session (the `secrets:` block below)
+    owner: mike
+    items: [SUPABASE_SERVICE_KEY, SUPABASE_URL, ELEVENLABS_API_KEY, CLAUDE_EMAIL_PW]
+    migrate_later: skills/provision-accounts.md
+
+# --- Components this profile provisions (reusable Soma modules) ---
+components:
+  soma-agent:
+    what: SOMA-Guide engine ("Bill") — voice+text site assistant, loaded from CDN
+    source_repo: soma-platform           # packages/soma-guide/{js,css}; manual dist/ deploy
+    runtime: https://soma-guide.netlify.app/soma-guide.js
+    note: specific engine version + persona/agent IDs live in the repos; read them there
+  soma-auth:
+    what: Supabase magic-link auth (the reference implementation lives in legends)
+    source_repo: legends-membership-site  # js/soma-auth.js + js/soma-auth-config.js
+    note: Netlify Identity is permanently removed — never re-add it
+
+# --- Repos to clone (private; cloned in Phase 1 after `gh auth login`) ---
+repos:
+  - name: legends-membership-site
+    url: https://github.com/eldrgeek/legends-membership.git
+    dest: ~/Projects/legends-membership-site
+    branch: master
+    role: the static site, admin Change Log, Bill config, tour audio, Netlify functions
+    deploy: auto-deploys to production on push to master (Netlify)
+  - name: soma-platform
+    url: https://github.com/eldrgeek/soma-platform.git
+    dest: ~/Projects/soma-platform
+    branch: master
+    role: the shared SOMA-Guide engine (soma-agent) + docs
+    deploy: MANUAL — cp to dist/ then `netlify deploy --prod --dir=dist`
+  - name: bill-talk
+    url: https://github.com/eldrgeek/bill-talk.git
+    dest: ~/Projects/bill-talk
+    branch: master
+    role: ElevenLabs TTS proxy (el-proxy); holds ELEVENLABS_API_KEY in its Netlify env
+    deploy: Netlify
+  - name: claude-email-daemon
+    url: https://github.com/eldrgeek/claude-email-daemon.git
+    dest: ~/Projects/claude-email-daemon
+    branch: master
+    role: daemon.py — the change-management queue/vet/dispatch
+    deploy: runs locally on the Mac
+
+# --- Infra secrets (Mike's): prompt the user to paste each; write to target; chmod 600. ---
+# Values are supplied out-of-band by Mike. NEVER stored in this repo.
+# (Model keys are Greg's own and handled in Phase 0 — see key_ownership above.)
+secrets:
+  - name: SUPABASE_SERVICE_KEY
+    target: ~/Projects/claude-email-daemon/.env
+    used_by: daemon (read/write the change_requests + bill_transcripts tables)
+    sensitivity: HIGH — full DB access; mask after writing
+  - name: SUPABASE_URL
+    target: ~/Projects/claude-email-daemon/.env
+    used_by: daemon
+    sensitivity: low (project URL, but keep with the key)
+  - name: ELEVENLABS_API_KEY
+    target: bill-talk Netlify env (set via `netlify env:set` in the bill-talk dir)
+    used_by: el-proxy TTS + editing the Bill/Dana/Quinn agents
+    sensitivity: HIGH
+    note: already deployed in bill-talk's Netlify env; only needed if re-provisioning
+  - name: CLAUDE_EMAIL_PW
+    target: ~/Projects/claude-email-daemon/.env
+    used_by: daemon email channel — NOT needed in queue-only first launch (email OFF)
+    sensitivity: HIGH
+    optional_until: Phase 3 / email channel enabled
+
+# --- External services (runtime deps the deployed site calls; not stood up here) ---
+services:
+  supabase:
+    role: the change_requests queue + bill_transcripts recording
+    note: shared single-tenant for now — the reason to move Greg to his own project soon
+  netlify:
+    sites:
+      - legends-membership.netlify.app   # the site (auto-deploy)
+      - soma-guide.netlify.app           # the soma-agent engine CDN (manual deploy)
+  elevenlabs:
+    role: Bill/Dana/Quinn conversational voice agents (3 separate agents)
+  vps_inference:
+    role: text Q&A backend (infer/ask) that Bill's text answers call
+
+# --- Daemon configuration: SAFETY-CRITICAL DEFAULTS ---
+daemon:
+  mode: queue-only            # INVARIANT: do not change for a second maintainer
+  email_polling: false        # OFF — avoid double-processing the shared mailbox
+  auto_dispatch: false        # OFF — Greg is the build worker
+  build_firing: false         # OFF — cc-dispatch is Phase 3 opt-in
+  second_opinion: claude-cli  # uses the standalone `claude` installed in Phase 0
+  first_pass_model: qwen2.5:7b (ollama, local)
+  worker_model_for_greg: CDCC interactive (Greg runs the build himself)
+  start: foreground dry-run first; install launchd service only after a clean run
+
+# --- Test gates: each phase must pass its gate before the next begins ---
+gates:
+  phase0: checks/phase0-toolchain.sh
+  phase1: checks/phase1-site.sh
+  phase2: checks/phase2-daemon.sh
+  # phase1 also requires a LIVE human smoke test: open the site in CiC, trigger Bill,
+  # ask one text question (+ one voice turn if voice is in scope).
+
+# --- What's intentionally NOT done at first launch ---
+deferred:
+  - cc-dispatch / mac-controller auto build worker (Phase 3, opt-in)
+  - provisioning Greg's own ElevenLabs/Supabase accounts (skills/provision-accounts.md)
+  - enabling the email intake channel
