@@ -1,5 +1,8 @@
 # SomaSetup
 
+**Status:** Active setup kit for putting a SOMA/Legends development environment in Greg's hands
+**Authorship:** Mike Wolf + prior AI setup collaborators; 2026-06-26 Codex (GPT-5) added mission, focus, and authorship guidance.
+
 Agent-driven, self-healing installer for standing up a Soma site on a fresh Mac.
 The human runs ~5 trust-gate clicks; **Claude Code in Claude Desktop (CDCC)** does
 everything else — installs the toolchain, clones the repos, wires secrets, brings
@@ -10,6 +13,23 @@ This version ships **profile #1: `legends`** — the Legends of Basketball membe
 site, which includes **soma-agent** (the SOMA-Guide / "Bill" engine) and
 **soma-auth** (Supabase magic-link). Future profiles reuse the same machinery to
 stand up any Soma site.
+
+## Mission and focus
+
+This repo exists to put Greg in control of the practical SOMA development environment,
+starting with Legends. The priority order is:
+
+1. **Legends first:** build the Legends Membership Services/Bill loop as far and as
+   fast as Greg wants to take it.
+2. **Playmaker/Playwriting second:** after Legends is moving, push the Playmaker
+   product/naming work with Eric as fast as he can move. Do not confuse this with
+   Playwright browser automation unless the task is explicitly about tests or browser
+   control.
+
+If an AI notices Mike, Greg, or itself wandering into adjacent SOMA ideas before the
+active goal is done, it should say so gently and steer back to the current Legends or
+Playmaker priority unless Mike explicitly changes the goal. This is not resistance;
+Mike asked for focus help.
 
 ## How it works
 

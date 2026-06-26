@@ -1,5 +1,8 @@
 # Bootstrap email — what Mike sends Greg
 
+**Status:** Copy/paste bootstrap for Greg's first SomaSetup run
+**Authorship:** Mike Wolf + prior AI setup collaborators; 2026-06-26 Codex (GPT-5) added focus/authorship guidance.
+
 Greg pastes the block below into a **new Claude Desktop → Code session** (after
 finishing the five Stage-0 clicks). Keep the email short and trusted: it carries no
 secrets, just sets the mode and hands CDCC the versioned instructions.
@@ -26,6 +29,12 @@ You are setting up the Legends of Basketball maintenance environment on this Mac
 Greg, a non-developer. You have: an integrated terminal/Bash, file tools, computer
 use, and Claude in Chrome (CiC) already installed and paired. Greg is signed into
 Chrome with his Google account.
+
+North star: get Legends and Bill into Greg's hands first, as far and as fast as Greg
+wants to take it. If Mike, Greg, or you drift into broader SOMA architecture or the
+Playmaker/Playwriting track before this setup phase is green, name the drift gently
+and pull back to the current Legends setup goal unless Greg or Mike explicitly changes
+the goal.
 
 Do this:
 

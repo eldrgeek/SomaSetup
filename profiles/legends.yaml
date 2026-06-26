@@ -2,6 +2,8 @@
 # The Legends of Basketball membership site + embedded SOMA guide (Bill) + the
 # change-management queue. Consumed by SOMASETUP.md. Contains NO secret values —
 # only the names of secrets to prompt for, and where they go.
+# Authorship/update note: Mike Wolf direction + prior AI setup collaborators;
+# 2026-06-26 Codex (GPT-5) added focus guardrails.
 
 profile: legends
 description: >
@@ -13,15 +15,34 @@ description: >
   first launch. Migrating infra to Greg's own accounts is skills/provision-accounts.md
   (skill #2), not part of first launch.
 
+focus:
+  primary_goal: >
+    Build the Legends Membership Services/Bill loop as far and as fast as Greg wants
+    to take it. This profile is the practical way to put the SOMA development
+    environment in Greg's hands.
+  secondary_goal: >
+    After Legends is moving, push Playmaker/Playwriting forward with Eric through the
+    naming/product transition as fast as he can move.
+  drift_guardrail: >
+    If Mike, Greg, or an AI starts wandering into broader SOMA architecture or lower
+    priority possibilities before the active setup gate is green, gently call out the
+    drift and steer back to the current Legends goal unless the human explicitly
+    changes the goal. If someone says "Playwright" in this product context, confirm
+    whether they mean Playmaker/Playwriting or the browser automation library before
+    acting.
+
 # --- Key ownership split (revision) ---
 key_ownership:
   model_keys:                 # GREG'S OWN — set up in Phase 0
     owner: greg
     items:
-      - claude_cli: sign the standalone `claude` CLI into Greg's Claude account
-      - openai_api_key: only if a profile/tool needs OpenAI; Greg creates his own
-                        (note: a ChatGPT subscription is NOT an API key)
-      - ollama: local qwen2.5:7b, free, no key
+      - claude_cli: >
+          sign the standalone `claude` CLI into Greg's Claude account
+      - openai_api_key: >
+          only if a profile/tool needs OpenAI; Greg creates his own
+          (note: a ChatGPT subscription is NOT an API key)
+      - ollama: >
+          local qwen2.5:7b, free, no key
   infra_keys:                 # MIKE'S — pasted in-session (the `secrets:` block below)
     owner: mike
     items: [SUPABASE_SERVICE_KEY, SUPABASE_URL, ELEVENLABS_API_KEY, CLAUDE_EMAIL_PW]

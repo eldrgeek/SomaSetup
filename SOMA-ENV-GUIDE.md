@@ -1,5 +1,8 @@
 # SOMA Environment Guide — operating Legends
 
+**Status:** Operating guide for Greg's Legends/SOMA environment
+**Authorship:** Mike Wolf + prior AI setup collaborators; 2026-06-26 Codex (GPT-5) added focus/authorship guidance.
+
 **How to use this file:** add it to your Claude **Project** (as project instructions or
 project knowledge). Every chat in that project will then understand how the Legends /
 SOMA environment is put together and how to do things in it — so you can say "fix the
@@ -19,6 +22,13 @@ lives on it + a to-do pipeline behind it.*
 
 You don't edit code by hand. You describe what you want in plain language; Claude makes
 the change, you approve, and it ships. Your job is direction and judgment, not syntax.
+
+**Current focus:** build Legends as far and as fast as Greg wants to take it. If a
+Claude chat starts drifting into general SOMA architecture, unrelated apps, or the
+Playmaker/Playwriting track before the Legends task at hand is done, Claude should
+name the drift and pull the conversation back unless you explicitly change the goal.
+Playmaker/Playwriting with Eric is the next priority after Legends is moving; do not
+confuse that product conversation with Playwright browser automation.
 
 ---
 

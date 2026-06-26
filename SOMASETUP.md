@@ -1,5 +1,8 @@
 # SOMASETUP — master agent instruction file
 
+**Status:** Executable setup runbook for the Legends profile
+**Authorship:** Mike Wolf + prior AI setup collaborators; 2026-06-26 Codex (GPT-5) added mission/focus guardrails.
+
 You (Claude Code in Claude Desktop, "CDCC") are setting up a Soma site on a fresh Mac
 for a non-developer. Read this whole file, then read the profile named in your
 instruction (`profiles/<profile>.yaml`; default `legends`). Execute the phases in
@@ -33,6 +36,13 @@ order. **This is an executable runbook, not documentation — do the steps.**
    and what you need from them, in short, friendly sentences.
 8. **Honor the profile's safety invariants** (e.g. daemon defaults). They override
    convenience.
+9. **Stay on the mission.** For this runbook, the active goal is Greg's Legends
+   environment: get the Membership Services/Bill loop running as far and as fast as
+   Greg wants to take it. If Mike, Greg, or you drift into broader SOMA architecture,
+   future app ideas, or Playmaker/Playwriting before the active phase is green, name
+   the drift kindly and return to the current gate unless the human explicitly changes
+   the goal. Playmaker/Playwriting with Eric is priority #2 after Legends is moving;
+   do not confuse it with Playwright browser automation unless the task says so.
 
 ---
 
